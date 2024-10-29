@@ -1,0 +1,24 @@
+body {
+    background-image: url('https://www.google.com/imgres?q=school%20system%20app%20photo&imgurl=https%3A%2F%2Fplay-lh.googleusercontent.com%2FINY4vfQNUb6DmvSAmEDqcZAJzYbDkPa9WORf0AdZMeJQDBXkPeQypC-25Cl1Rc1XLzA&imgrefurl=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.hqdevs.schoolmanagementsystem&docid=PrWwHpFDAr4cVM&tbnid=5BcaoSgh3Q4KmM&vet=12ahUKEwixr5SCt7OJAxUb9wIHHd3cItQQM3oECCoQAA..i&w=512&h=512&hcb=2&ved=2ahUKEwixr5SCt7OJAxUb9wIHHd3cItQQM3oECCoQAA'); /* Replace with your image path */
+    background-size: cover;
+    background-position: center;
+}
+
+.card {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.table th {
+    background-color: #343a40; /* Darker header for tables */
+    color: white;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f2f2f2; /* Zebra stripe effect */
+}
