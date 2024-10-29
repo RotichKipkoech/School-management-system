@@ -493,5 +493,28 @@ def delete_user(user_id):
     return redirect(url_for('admin_dashboard'))
 
 
+from flask import render_template
+from flask_login import current_user, login_required
+
+@app.route('/profile')
+@login_required
+def profile():
+    # Use current_user to get the logged-in user's details
+    return render_template('profile.html', user=current_user)
+
+@app.route('/request_password_reset', methods=['POST'])
+@login_required
+def request_password_reset():
+    username = request.form.get('username')
+    reason = request.form.get('reason', '')
+
+    # Notify the admin or handle the request as needed
+    # You can send an email or flash a message for admin to see the request
+    flash(f'Password reset request submitted for {username}.', 'info')
+
+    # Here you can implement the logic to notify the admin, e.g., sending an email
+    return redirect(url_for('profile'))  # Redirect back to profile
+
+
 if __name__ == '__main__':
     app.run(debug=True)
