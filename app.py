@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_migrate import Migrate
 from forms import LoginForm, CreateStudentForm, CreateTeacherForm, CreateParentForm, CreateFinanceForm
-from models import db, User, Student, Teacher, Parent, Finance, Assignment, Remark, Attendance, Fee, Mark
+from models import db, User, Student, Teacher, Parent, Finance, Assignment, Remark, Attendance, Fee, Mark, PasswordResetRequest
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///school_system.db'  # Update if necessary
@@ -88,7 +88,8 @@ def admin_dashboard():
         return redirect(url_for('dashboard'))
 
     users = User.query.all()  # Fetch all users to display
-    return render_template('admin_dashboard.html', users=users)
+    reset_requests = PasswordResetRequest.query.all()  # Fetch password reset requests
+    return render_template('admin_dashboard.html', users=users, reset_requests=reset_requests)
 
 @app.route('/create_student', methods=['GET', 'POST'])
 @login_required
@@ -505,15 +506,14 @@ def profile():
 @app.route('/request_password_reset', methods=['POST'])
 @login_required
 def request_password_reset():
-    username = request.form.get('username')
-    reason = request.form.get('reason', '')
+    reason = request.form.get('reason')  # Extract reason from form
+    user_id = current_user.id  # Get the current user's ID
 
-    # Notify the admin or handle the request as needed
-    # You can send an email or flash a message for admin to see the request
-    flash(f'Password reset request submitted for {username}.', 'info')
-
-    # Here you can implement the logic to notify the admin, e.g., sending an email
-    return redirect(url_for('profile'))  # Redirect back to profile
+    reset_request = PasswordResetRequest(user_id=user_id, reason=reason)
+    db.session.add(reset_request)
+    db.session.commit()
+    flash('Password reset request submitted!', 'success')
+    return redirect(url_for('admin_dashboard'))
 
 
 if __name__ == '__main__':
