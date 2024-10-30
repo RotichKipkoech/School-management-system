@@ -474,6 +474,9 @@ def edit_user(user_id):
     if request.method == 'POST':
         user.username = request.form.get('username')
         user.role = request.form.get('role')  # Ensure to handle role correctly
+        new_password = request.form.get('password')
+        if new_password:
+            user.password = generate_password_hash(new_password)
         db.session.commit()
         flash('User updated successfully!', 'success')
         return redirect(url_for('admin_dashboard'))
