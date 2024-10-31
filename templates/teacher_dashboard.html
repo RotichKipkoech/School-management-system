@@ -28,19 +28,23 @@
 
 <div class="card my-4">
     <div class="card-body">
-        <h5 class="card-title">Student List</h5>
+        <h5 class="card-title">Student List with Rank</h5>
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>Rank</th>
                     <th>Name</th>
                     <th>Admission Number</th>
+                    <th>Average Score</th>
                 </tr>
             </thead>
             <tbody>
-                {% for student in students %}
+                {% for student_data in student_performance %}
                 <tr>
-                    <td>{{ student.name }}</td>
-                    <td>{{ student.admission_number }}</td>
+                    <td>{{ loop.index }}</td> <!-- Rank based on position in sorted list -->
+                    <td>{{ student_data.student.name }}</td>
+                    <td>{{ student_data.student.admission_number }}</td>
+                    <td>{{ student_data.average_score | round(2) }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

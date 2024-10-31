@@ -197,11 +197,31 @@ def teacher_dashboard():
         flash("Unauthorized access.", 'danger')
         return redirect(url_for('dashboard'))
     
-    # Fetch assignments and students for display
+    # Fetch assignments for the logged-in teacher
     assignments = Assignment.query.filter_by(teacher_id=current_user.id).all()
-    students = Student.query.all()  # Assumes Student model includes admission numbers
-    
-    return render_template('teacher_dashboard.html', assignments=assignments, students=students)
+
+    # Fetch all students and their associated marks
+    students = Student.query.all()
+    student_performance = []
+
+    for student in students:
+        # Calculate average score for each student
+        marks = Mark.query.filter_by(student_id=student.id).all()
+        if marks:
+            average_score = sum(mark.score for mark in marks) / len(marks)
+        else:
+            average_score = 0
+
+        student_performance.append({
+            'student': student,
+            'average_score': average_score
+        })
+
+    # Sort students by average score in descending order (highest first)
+    student_performance.sort(key=lambda x: x['average_score'], reverse=True)
+
+    return render_template('teacher_dashboard.html', assignments=assignments, student_performance=student_performance)
+
 
 
 @app.route('/create_assignment', methods=['GET', 'POST'])
