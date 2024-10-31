@@ -125,3 +125,34 @@ h2.text-center {
         font-size: 0.9rem;
     }
 }
+
+/* Action Buttons Styling */
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping if there's not enough space */
+    gap: 0.5rem; /* Small gap between buttons */
+}
+
+.action-buttons .btn {
+    padding: 0.4rem 0.6rem; /* Adjust padding for smaller button size */
+    font-size: 0.85rem; /* Smaller font size */
+}
+
+/* Responsive Styling for Table and Action Buttons */
+@media (max-width: 768px) {
+    .table {
+        display: block; /* Makes the table scrollable on small screens */
+        overflow-x: auto;
+        white-space: nowrap; /* Prevents text from wrapping */
+    }
+
+    /* Stack buttons vertically on smaller screens */
+    .action-buttons {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .action-buttons .btn {
+        width: auto; /* Ensures buttons do not stretch on smaller screens */
+    }
+}

@@ -3,10 +3,17 @@
 <h2>Create Student</h2>
 <form method="POST" action="{{ url_for('create_student') }}">
     {{ form.hidden_tag() }}
+    
     <div class="mb-3">
         {{ form.name.label(class="form-label") }}
         {{ form.name(class="form-control") }}
     </div>
+    
+    <div class="mb-3">
+        {{ form.class_name.label(class="form-label") }}  <!-- Add this line -->
+        {{ form.class_name(class="form-control") }}      <!-- Add this line -->
+    </div>
+
     {{ form.submit(class="btn btn-primary") }}
 </form>
 {% endblock %}

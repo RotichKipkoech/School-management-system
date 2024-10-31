@@ -97,14 +97,20 @@ def create_student():
     if current_user.role != 'Admin':
         flash("Unauthorized access.", 'danger')
         return redirect(url_for('dashboard'))
+
     form = CreateStudentForm()
     if form.validate_on_submit():
         admission_number = Student.generate_admission_number()  # Ensure this method exists in your Student model
-        student = Student(name=form.name.data, admission_number=admission_number)
+        student = Student(
+            name=form.name.data,
+            admission_number=admission_number,
+            class_name=form.class_name.data  # Add this line to include the class
+        )
         db.session.add(student)
         db.session.commit()
         flash('Student created successfully!', 'success')
         return redirect(url_for('admin_dashboard'))
+
     return render_template('create_student.html', form=form)
 
 @app.route('/create_teacher', methods=['GET', 'POST'])
@@ -183,13 +189,20 @@ def create_finance():
     return render_template('create_finance.html', form=form)
 
 # Teacher Dashboard Route
+# Teacher Dashboard Route
 @app.route('/teacher/dashboard')
 @login_required
 def teacher_dashboard():
     if current_user.role != 'Teacher':
         flash("Unauthorized access.", 'danger')
         return redirect(url_for('dashboard'))
-    return render_template('teacher_dashboard.html')
+    
+    # Fetch assignments and students for display
+    assignments = Assignment.query.filter_by(teacher_id=current_user.id).all()
+    students = Student.query.all()  # Assumes Student model includes admission numbers
+    
+    return render_template('teacher_dashboard.html', assignments=assignments, students=students)
+
 
 @app.route('/create_assignment', methods=['GET', 'POST'])
 @login_required
@@ -322,6 +335,7 @@ def mark_attendance():
     return render_template('mark_attendance.html', students=students)
 
 # Parent Dashboard Route
+# Parent Dashboard Route
 @app.route('/parent_dashboard')
 @login_required
 def parent_dashboard():
@@ -333,14 +347,14 @@ def parent_dashboard():
     parent = Parent.query.filter_by(user_id=current_user.id).first()
     if not parent:
         flash('No parent found for this user.', 'info')
-        return render_template('parent_dashboard.html', assignments=[], remarks=[], fees=[], marks=[])
+        return render_template('parent_dashboard.html', students=[], assignments=[], remarks=[], fees=[], marks=[])
 
     # Get all students associated with the parent
     students = parent.students  # This will now return all students linked to the parent
 
     if not students:
         flash('No students found for this parent.', 'info')
-        return render_template('parent_dashboard.html', assignments=[], remarks=[], fees=[], marks=[])
+        return render_template('parent_dashboard.html', students=[], assignments=[], remarks=[], fees=[], marks=[])
 
     # Fetch assignments, remarks, and fees for the associated students
     assignments = Assignment.query.filter(Assignment.student_id.in_([student.id for student in students])).all()
@@ -350,7 +364,7 @@ def parent_dashboard():
     # Fetch marks for the associated students
     marks = Mark.query.filter(Mark.student_id.in_([student.id for student in students])).all()
 
-    return render_template('parent_dashboard.html', assignments=assignments, remarks=remarks, fees=fees, marks=marks)
+    return render_template('parent_dashboard.html', students=students, assignments=assignments, remarks=remarks, fees=fees, marks=marks)
 
 
 

@@ -9,6 +9,7 @@ class LoginForm(FlaskForm):
 
 class CreateStudentForm(FlaskForm):
     name = StringField('Student Name', validators=[DataRequired(), Length(min=3, max=100)])
+    class_name = StringField('Class (e.g., Grade 1, Grade 2)', validators=[DataRequired(), Length(max=50)])
     submit = SubmitField('Create Student')
 
 class CreateTeacherForm(FlaskForm):

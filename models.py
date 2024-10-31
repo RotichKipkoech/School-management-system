@@ -17,6 +17,7 @@ class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     admission_number = db.Column(db.String(10), unique=True, nullable=False)
     name = db.Column(db.String(150), nullable=False)
+    class_name = db.Column(db.String(50), nullable=False)  # Add this line for class input
     parent_id = db.Column(db.Integer, db.ForeignKey('parent.id'))  # Link to Parent model
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -119,4 +120,3 @@ class PasswordResetRequest(db.Model):
     def __init__(self, user_id, reason):
         self.user_id = user_id
         self.reason = reason
-
