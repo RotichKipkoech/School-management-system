@@ -38,7 +38,7 @@ def login():
         if form.username.data == "Admin" and form.password.data == "Admin@123":
             admin_user = User.query.filter_by(username="Admin").first()
             if not admin_user:
-                # Create Admin user if it does not exist
+                # Create Admin user if it does not exist. Admin username and password are already set.
                 admin_user = User(username="Admin", password=generate_password_hash("Admin@123"), role='Admin')
                 db.session.add(admin_user)
                 db.session.commit()
